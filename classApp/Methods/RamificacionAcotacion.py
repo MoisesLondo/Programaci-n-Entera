@@ -1,29 +1,45 @@
 # Importar la biblioteca de PuLP
-from pulp import LpMaximize, LpProblem, LpVariable, LpStatus, PULP_CBC_CMD
+from pulp import LpMaximize, LpProblem, LpVariable, LpStatus, PULP_CBC_CMD, LpMinimize
 
-# Crear un problema de maximización
-prob = LpProblem("Ejemplo_Programacion_Entera", LpMaximize)
+class RamificacionAcotacion:
+    def __init__(self, value1, value2,res1, res2, type):
+        self.value1 = value1
+        self.value2 = value2
+        self.res1 = res1
+        self.res2 = res2
+        self.type = type
 
-# Definir variables (enteras)
-x = LpVariable('x', lowBound=0, cat='Integer')
-y = LpVariable('y', lowBound=0, cat='Integer')
+        if self.type == "max":
+            self.prob = LpProblem("Ejemplo_Programacion_Entera", LpMaximize)
+        else:
+            self.prob = LpProblem("Ejemplo_Programacion_Entera", LpMinimize)
 
-# Definir la función objetivo
-prob += 3 * x + 2 * y, "Función Objetivo"
+        # Definir las variables de decisión (binarias)
+        self.x = LpVariable('x', lowBound=0, cat='Integer')
+        self.y = LpVariable('y', lowBound=0, cat='Integer')
 
-# Definir las restricciones
-prob += x + y <= 4, "Restriccion_1"
-prob += x - y >= 0, "Restriccion_2"
+        # Definir la función objetivo
+        self.prob += self.value1 * self.x + self.value2 * self.y, "Función Objetivo"
 
-# Resolver el problema utilizando el solucionador por defecto (CBC)
-prob.solve(PULP_CBC_CMD(msg=True))
+        # Definir las restricciones
+        self.prob += self.x + self.y <= self.res1, "Restriccion_1"
+        self.prob += self.x - self.y >= self.res2, "Restriccion_2"
 
-# Mostrar el estado de la solución
-print(f"Estado de la solución: {LpStatus[prob.status]}")
+    def solve(self):
+        # Resolver el problema
+        self.prob.solve(PULP_CBC_CMD(msg=True))
 
-# Mostrar los valores óptimos de las variables
-print(f"x = {x.varValue}")
-print(f"y = {y.varValue}")
+    def result(self):
+        # Mostrar el estado de la solución
+        print(f"Estado de la solución: {LpStatus[self.prob.status]}")
 
-# Mostrar el valor óptimo de la función objetivo
-print(f"Valor óptimo de Z = {prob.objective.value()}")
+        # Mostrar los valores óptimos de las variables
+        print(f"x = {self.x.varValue}")
+        print(f"y = {self.y.varValue}")
+
+        # Mostrar el valor óptimo de la función objetivo
+        print(f"Valor óptimo de Z = {self.prob.objective.value()}")
+
+test = RamificacionAcotacion(5, 4, 6, 4, "max")
+test.solve()
+test.result()

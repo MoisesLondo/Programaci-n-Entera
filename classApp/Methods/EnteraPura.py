@@ -1,28 +1,47 @@
-from pulp import LpMaximize, LpProblem, LpVariable, LpStatus
+from pulp import LpMaximize, LpProblem, LpVariable, LpStatus, LpMinimize
 
-# Crear un problema de maximización
-prob = LpProblem("Programacion_Entera_Pura", LpMaximize)
 
-# Definir las variables de decisión (enteras)
-x = LpVariable('x', lowBound=0, cat='Integer')
-y = LpVariable('y', lowBound=0, cat='Integer')
+class EnteraPura:
+    def __init__(self, value1, value2, coefRes1, coefRes2, res1, coefRes3, coefRes4, res2, type):
+        self.value1 = value1
+        self.value2 = value2
+        self.coefRes1 = coefRes1
+        self.coefRes2 = coefRes2
+        self.coefRes3 = coefRes3
+        self.coefRes4 = coefRes4
+        self.res1 = res1
+        self.res2 = res2
+        self.type = type
 
-# Definir la función objetivo
-prob += 5 * x + 3 * y, "Función Objetivo"
+        # Crear un problema de maximización
+        if self.type == "max":
+            self.prob = LpProblem("Programacion_Entera_Pura", LpMaximize)
+        else:
+            self.prob = LpProblem("Programacion_Entera_Pura", LpMinimize)
 
-# Definir las restricciones
-prob += 2 * x + 3 * y <= 12, "Restriccion_1"
-prob += 2 * x + y <= 8, "Restriccion_2"
+        # Definir las variables de decisión (enteras)
+        self.x = LpVariable('x', lowBound=0, cat='Integer')
+        self.y = LpVariable('y', lowBound=0, cat='Integer')
 
-# Resolver el problema
-prob.solve()
+        # Definir la función objetivo
+        self.prob += self.value1 * self.x + self.value2 * self.y, "Función Objetivo"
 
-# Mostrar el estado de la solución
-print(f"Estado de la solución: {LpStatus[prob.status]}")
+        # Definir las restricciones
+        self.prob += self.coefRes1 * self.x + self.coefRes2 * self.y <= self.res1, "Restriccion_1"
+        self.prob += self.coefRes3 * self.x + self.coefRes4 * self.y <= self.res2, "Restriccion_2"
 
-# Mostrar los valores óptimos de las variables
-print(f"x = {x.varValue}")
-print(f"y = {y.varValue}")
+    def solve(self):
+        # Resolver el problema
+        self.prob.solve()
 
-# Mostrar el valor óptimo de la función objetivo
-print(f"Valor óptimo de Z = {prob.objective.value()}")
+    def result(self):
+        # Mostrar el estado de la solución
+        print(f"Estado de la solución: {LpStatus[self.prob.status]}")
+
+        # Mostrar los valores óptimos de las variables
+        print(f"x = {self.x.varValue}")
+        print(f"y = {self.y.varValue}")
+
+        # Mostrar el valor óptimo de la función objetivo
+        print(f"Valor óptimo de Z = {self.prob.objective.value()}")
+
