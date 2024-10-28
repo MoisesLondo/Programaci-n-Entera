@@ -1,0 +1,10 @@
+size: 
+  width: 600
+  height: 700
+colors:
+  primary: '#d3ee98'
+  second: '#784ca8'
+  danger: '#Ff0038'
+input:
+  text-size: 15
+  height: 45
