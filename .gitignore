@@ -124,6 +124,8 @@ celerybeat.pid
 # Environments
 .env
 .venv
+#its for AstroLui
+travis/ 
 env/
 venv/
 ENV/
