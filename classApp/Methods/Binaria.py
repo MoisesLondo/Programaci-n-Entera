@@ -2,7 +2,7 @@ from pulp import LpMinimize, LpProblem, LpVariable, LpStatus, LpMaximize
 
 
 class Binaria:
-    def __init__(self, value1, value2, value3, res1, res2, type) -> None:
+    def __init__(self, value1:int=0, value2:int=0, value3:int=0, res1:int=0, res2:int=0, type:str="max") -> None:
         self.value1 = value1
         self.value2 = value2
         self.value3 = value3
@@ -42,6 +42,14 @@ class Binaria:
 
         # Mostrar el valor óptimo de la función objetivo
         print(f"Valor óptimo de Z = {self.prob.objective.value()}")
+
+    def set_atr(self, value1:int, value2:int, value3:int, res1:int, res2:int, type:str) -> None: 
+        self.value1 = value1
+        self.value2 = value2
+        self.value3 = value3
+        self.res1 = res1
+        self.res2 = res2
+        self.type = type
 
 
     
