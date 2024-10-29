@@ -2,9 +2,9 @@ size:
   width: 600
   height: 700
 colors:
-  primary: '#d3ee98'
-  second: '#784ca8'
-  danger: '#Ff0038'
+  primary: '#F3F3E0'
+  second: '#133E87' #133E87 #94cdd6
+  danger: '#608BC1'
 input:
   text-size: 15
   height: 45

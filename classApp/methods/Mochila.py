@@ -34,17 +34,17 @@ class Mochila:
             print(f"x{i+1} (objeto {i+1}): {var.varValue}")
         print(f"Valor total máximo: {self.prob.objective.value()}")
 
+if __name__ == "__main__":
+    valores = [15, 25, 12, 10]
+    pesos = [3, 6, 5, 5]
+    capacidad = 12
 
-valores = [15, 25, 12, 10]
-pesos = [3, 6, 5, 5]
-capacidad = 12
+    # Crear una instancia de ProblemaMochila
+    mochila = Mochila(valores, pesos, capacidad)
 
-# Crear una instancia de ProblemaMochila
-mochila = Mochila(valores, pesos, capacidad)
+    # Resolver el problema
+    mochila.resolver()
 
-# Resolver el problema
-mochila.resolver()
-
-# Mostrar los resultados
-print("\nResultados:")
-mochila.mostrar_resultados()
+    # Mostrar los resultados
+    print("\nResultados:")
+    mochila.mostrar_resultados()

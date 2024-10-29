@@ -28,7 +28,7 @@ class EnteraMixta:
         # Resolver el problema
         self.prob.solve()
 
-    def result(self) -> Nones:
+    def result(self) -> None:
         # Mostrar el estado de la solución
         print(f"Estado de la solución: {LpStatus[self.prob.status]}")
 
