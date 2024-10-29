@@ -2,7 +2,7 @@
 from pulp import LpMaximize, LpProblem, LpVariable, LpStatus, PULP_CBC_CMD, LpMinimize
 
 class RamificacionAcotacion:
-    def __init__(self, value1, value2,res1, res2, type):
+    def __init__(self, value1, value2,res1, res2, type) -> None:
         self.value1 = value1
         self.value2 = value2
         self.res1 = res1
@@ -25,11 +25,11 @@ class RamificacionAcotacion:
         self.prob += self.x + self.y <= self.res1, "Restriccion_1"
         self.prob += self.x - self.y >= self.res2, "Restriccion_2"
 
-    def solve(self):
+    def solve(self) -> None:
         # Resolver el problema
         self.prob.solve(PULP_CBC_CMD(msg=True))
 
-    def result(self):
+    def result(self) -> None:
         # Mostrar el estado de la solución
         print(f"Estado de la solución: {LpStatus[self.prob.status]}")
 
@@ -40,6 +40,7 @@ class RamificacionAcotacion:
         # Mostrar el valor óptimo de la función objetivo
         print(f"Valor óptimo de Z = {self.prob.objective.value()}")
 
-test = RamificacionAcotacion(5, 4, 6, 4, "max")
-test.solve()
-test.result()
+if __name__ == "__main__":
+    test = RamificacionAcotacion(5, 4, 6, 4, "max")
+    test.solve()
+    test.result()

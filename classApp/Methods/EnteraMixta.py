@@ -1,7 +1,7 @@
 from pulp import LpMaximize, LpProblem, LpVariable, LpStatus, LpMinimize
 
 class EnteraMixta:
-    def __init__(self, value1, value2, valueRes1, valueRes2, res, type):
+    def __init__(self, value1, value2, valueRes1, valueRes2, res, type) -> None:
         self.value1 = value1
         self.value2 = value2
         self.valueRes1 = valueRes1
@@ -24,11 +24,11 @@ class EnteraMixta:
         # Definir las restricciones
         self.prob += self.valueRes1 * self.x + self.valueRes2 * self.y <= self.res, "Restriccion_1"
 
-    def solve(self):
+    def solve(self) -> None:
         # Resolver el problema
         self.prob.solve()
 
-    def result(self):
+    def result(self) -> Nones:
         # Mostrar el estado de la solución
         print(f"Estado de la solución: {LpStatus[self.prob.status]}")
 

@@ -2,7 +2,7 @@ from pulp import LpMinimize, LpProblem, LpVariable, LpStatus, LpMaximize
 
 
 class Binaria:
-    def __init__(self, value1, value2, value3, res1, res2, type):
+    def __init__(self, value1, value2, value3, res1, res2, type) -> None:
         self.value1 = value1
         self.value2 = value2
         self.value3 = value3
@@ -28,10 +28,10 @@ class Binaria:
         self.prob += self.y + self.z >= self.res2, "Restriccion_2"
 
     # Resolver el problema
-    def solve(self):
+    def solve(self) -> None:
         self.prob.solve()
     
-    def result(self):
+    def result(self) -> None:
         # Mostrar el estado de la solución
         print(f"Estado de la solución: {LpStatus[self.prob.status]}")
 
@@ -44,4 +44,4 @@ class Binaria:
         print(f"Valor óptimo de Z = {self.prob.objective.value()}")
 
 
-
+    

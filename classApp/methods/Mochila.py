@@ -1,7 +1,7 @@
 from pulp import LpMaximize, LpProblem, LpVariable, lpSum, LpStatus, LpMinimize
 
 class Mochila:
-    def __init__(self, valores, pesos, capacidad, type):
+    def __init__(self, valores, pesos, capacidad, type) -> None:
         self.valores = valores
         self.pesos = pesos
         self.capacidad = capacidad
@@ -15,20 +15,20 @@ class Mochila:
         else:
             self.prob = LpProblem("Problema_de_la_Mochila", LpMinimize)
 
-    def crear_variables(self):
+    def crear_variables(self) -> []:
         return [LpVariable(f"x{i+1}", 0, 1, cat="Integer") for i in range(self.num_objetos)]
 
-    def definir_problema(self):
+    def definir_problema(self) -> None:
         # Función objetivo: maximizar el valor de los objetos seleccionados
         self.prob += lpSum(self.valores[i] * self.variables[i] for i in range(self.num_objetos)), "Valor_Total"
         
         # Restricción: la suma de los pesos de los objetos seleccionados no debe exceder la capacidad
         self.prob += lpSum(self.pesos[i] * self.variables[i] for i in range(self.num_objetos)) <= self.capacidad, "Restriccion_Capacidad"
 
-    def resolver(self):
+    def resolver(self) -> None:
         self.prob.solve()
 
-    def mostrar_resultados(self):
+    def mostrar_resultados(self) -> None:
         print(f"Estado de la solución: {LpStatus[self.prob.status]}")
         for i, var in enumerate(self.variables):
             print(f"x{i+1} (objeto {i+1}): {var.varValue}")

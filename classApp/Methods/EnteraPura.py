@@ -2,7 +2,7 @@ from pulp import LpMaximize, LpProblem, LpVariable, LpStatus, LpMinimize
 
 
 class EnteraPura:
-    def __init__(self, value1, value2, coefRes1, coefRes2, res1, coefRes3, coefRes4, res2, type):
+    def __init__(self, value1, value2, coefRes1, coefRes2, res1, coefRes3, coefRes4, res2, type) -> None:
         self.value1 = value1
         self.value2 = value2
         self.coefRes1 = coefRes1
@@ -30,11 +30,11 @@ class EnteraPura:
         self.prob += self.coefRes1 * self.x + self.coefRes2 * self.y <= self.res1, "Restriccion_1"
         self.prob += self.coefRes3 * self.x + self.coefRes4 * self.y <= self.res2, "Restriccion_2"
 
-    def solve(self):
+    def solve(self)-> None:
         # Resolver el problema
         self.prob.solve()
 
-    def result(self):
+    def result(self) -> None:
         # Mostrar el estado de la solución
         print(f"Estado de la solución: {LpStatus[self.prob.status]}")
 
