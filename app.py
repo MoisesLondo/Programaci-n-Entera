@@ -8,6 +8,7 @@ from classApp.Methods.EnteraPura import EnteraPura
 from classApp.Methods.Mochila import Mochila
 from classApp.Methods.RamificacionAcotacion import RamificacionAcotacion 
 from classApp.Methods.createTxt import createTXT
+from classApp.Methods.PlanosCortes import PlanosCortes
 # Import the new class
 import yaml
 import traceback
@@ -50,7 +51,7 @@ def main(page: ft.Page) -> None:
                     spacing=0, horizontal_alignment=ALIGN_HOR),
                     ft.Row([ Button("Binaria", lambda _: page.go('/binaria')), Button("Entera Mixta", lambda _: page.go('/mixta')), Button("Ramificacion Acotacion", lambda _: page.go('/ramificacion'))], 
                     spacing=10, alignment=ALIGN_VERT),
-                    ft.Row([ Button("Entera Pura", lambda _: page.go('/enterapura')), Button("Mochila", lambda _: page.go('/mochila'))], 
+                    ft.Row([ Button("Entera Pura", lambda _: page.go('/enterapura')), Button("Mochila", lambda _: page.go('/mochila')), Button("Planos y Cortes", lambda _: page.go('/planos'))], 
                     spacing=10, alignment=ALIGN_VERT)
                 ])
         )
@@ -234,6 +235,40 @@ def main(page: ft.Page) -> None:
                     Text('Mochila', 35, "w800"),
                     ft.Row([field_1, field_2, field_3], alignment=ALIGN_VERT, spacing=5), 
                     ft.Row([field_4], alignment=ALIGN_VERT, spacing=5),
+                    ft.Row([
+                        Button('Calcular', click_action=_),
+                        Button('Volver a menú', lambda _: page.go('/'))
+                    ], alignment=ALIGN_VERT, spacing=5)
+                     ])
+                )
+            
+        # Planos y Cortes
+        if page.route == '/planos':
+            field_1 = Field("Coeficientes de la función objetivo")
+            field_2 = Field("Coeficientes de las restricciones")
+            field_3 = Field("Valores de las restricciones")
+            def _(e) -> None:
+                try:
+                    createTXT(field_1.getValue(), field_2.getValue(), field_3.getValue())
+                    PlanosCortes.solve()
+                    PlanosCortes.result()
+                    modal.openModal(page, "Resultado", [ft.Text(PlanosCortes.getResult(), color=COLOR_SECOND), Button("Cerrar", lambda _: page.close(modal))])
+                except ValueError:
+                    alert.openAlert(page, "Error: Por favor, ingrese valores numéricos válidos.")
+                except TypeError:
+                    alert.openAlert(page, "Error: Tipo de dato incorrecto.")
+                except AttributeError:
+                    alert.openAlert(page, "Error: Atributo no encontrado.")
+                except Exception as ex:
+                    alert.openAlert(page, f"Error inesperado: {str(ex)}")
+
+            page.views.append(
+                ViewClass('/planos',
+                [
+                    Text('Planos y Cortes', 35, "w800"),
+                    ft.Row([field_1], alignment=ALIGN_VERT), 
+                    ft.Row([field_2], alignment=ALIGN_VERT), 
+                    ft.Row([field_3], alignment=ALIGN_VERT), 
                     ft.Row([
                         Button('Calcular', click_action=_),
                         Button('Volver a menú', lambda _: page.go('/'))
