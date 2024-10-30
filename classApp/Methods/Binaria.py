@@ -2,6 +2,8 @@ from pulp import LpMinimize, LpProblem, LpVariable, LpStatus, LpMaximize
 
 
 class Binaria:
+    _resultTxt:str
+
     def __init__(self, value1:int=0, value2:int=0, value3:int=0, res1:int=0, res2:int=0, type:str="max") -> None:
         self.value1 = value1
         self.value2 = value2
@@ -10,6 +12,8 @@ class Binaria:
         self.res2 = res2
         self.type = type
 
+
+    def pre_solve(self) -> None:
         if self.type == "max":
             self.prob = LpProblem("Programacion_Binaria", LpMaximize)
         else:
@@ -26,7 +30,6 @@ class Binaria:
     # Definir las restricciones
         self.prob += self.x + self.y >= self.res1, "Restriccion_1"
         self.prob += self.y + self.z >= self.res2, "Restriccion_2"
-
     # Resolver el problema
     def solve(self) -> None:
         self.prob.solve()
@@ -43,6 +46,13 @@ class Binaria:
         # Mostrar el valor óptimo de la función objetivo
         print(f"Valor óptimo de Z = {self.prob.objective.value()}")
 
+        self._resultTxt=f"""Estado de la solución: {LpStatus[self.prob.status]}
+    x = {self.x.varValue}
+    y = {self.y.varValue}
+    z = {self.z.varValue}
+Valor óptimo de Z = {self.prob.objective.value()}
+        """
+
     def set_atr(self, value1:int, value2:int, value3:int, res1:int, res2:int, type:str) -> None: 
         self.value1 = value1
         self.value2 = value2
@@ -50,6 +60,10 @@ class Binaria:
         self.res1 = res1
         self.res2 = res2
         self.type = type
+        self.pre_solve()
+    
 
+    def getResult(self) -> str:
+        return self._resultTxt
 
     

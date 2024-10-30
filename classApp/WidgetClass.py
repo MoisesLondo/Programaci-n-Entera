@@ -82,12 +82,15 @@ class Text(ft.Text):
         self.weight = weight
 
 class Modal(ft.AlertDialog):
-    def __init__(self, title: str, content):
+    def __init__(self):
         super().__init__()
-        self.title = ft.Text(title, color=COLOR_SECOND)
-        self.content = content
         self.bgcolor = COLOR_PRIMARY
     
+    def openModal(self, page:ft.Page, title:str, content:[]) -> None:
+        self.title = ft.Text(title, color=COLOR_SECOND)
+        self.content = ft.Column(controls=content, spacing=5, scroll=ft.ScrollMode.AUTO)
+        page.open(self)
+
 class Alert(ft.AlertDialog):
     def __init__(self, actions) -> None:
         super().__init__()
@@ -99,7 +102,6 @@ class Alert(ft.AlertDialog):
     def openAlert(self, page: ft.Page, text) -> None:
         self.content= ft.Text(text, color=COLOR_PRIMARY)
         page.open(self)
-
 
 
 class ButtonAlert(ft.ElevatedButton):
