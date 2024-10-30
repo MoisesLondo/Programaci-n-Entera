@@ -1,60 +1,60 @@
 import pulp
 import numpy as np
 
-# Función para agregar un corte de Gomory
-def agregar_corte(prob, vars, tableau):
-    filas, columnas = tableau.shape
-    for i in range(filas):
-        # Buscar filas fraccionarias (donde el término independiente no sea entero)
-        if not np.isclose(tableau[i, -1], np.floor(tableau[i, -1])):
-            # Generar un corte basado en la parte fraccionaria
-            corte = np.floor(tableau[i, -1]) - tableau[i, -1]
-            for j in range(columnas - 1):
-                if not np.isclose(tableau[i, j], 0):
-                    corte += (tableau[i, j] - np.floor(tableau[i, j])) * vars[j]
+class PlanosCortes:
+    def __init__(self, obj_coef, constraints, constraint_values) -> None:
+        # Initialize attributes
+        self.obj_coef = obj_coef  # Coefficients for the objective function
+        self.constraints = constraints  # Coefficients for each constraint
+        self.constraint_values = constraint_values  # RHS values for each constraint
+        self.prob = pulp.LpProblem("Ejemplo_Cortes_Gomory", pulp.LpMaximize)
 
-            # Agregar el corte como una restricción adicional
-            prob += corte <= 0, f"Corte_Gomory_{i}"
-            return True  # Se agregó un corte
-    return False  # No se encontraron cortes
+        # Define variables (continuous for initial relaxation)
+        self.vars = [pulp.LpVariable(f"x{i+1}", lowBound=0) for i in range(len(obj_coef))]
 
-# Crear el problema de maximización
-prob = pulp.LpProblem("Ejemplo_Cortes_Gomory", pulp.LpMaximize)
+        # Set up the objective function
+        self.prob += pulp.lpSum([self.obj_coef[i] * self.vars[i] for i in range(len(self.vars))]), "Función Objetivo"
 
-# Definir variables (continuas para la relajación inicial)
-x1 = pulp.LpVariable("x1", lowBound=0)
-x2 = pulp.LpVariable("x2", lowBound=0)
+        # Add constraints to the problem
+        for i, (coef, val) in enumerate(zip(self.constraints, self.constraint_values)):
+            self.prob += (pulp.lpSum([coef[j] * self.vars[j] for j in range(len(self.vars))]) <= val), f"Restriccion_{i+1}"
 
-# Definir la función objetivo
-prob += 5 * x1 + 4 * x2, "Función Objetivo"
+        # Initialize solution status and tableau (for demonstration purposes, it's predefined here)
+        self.tableau = np.array([coef + [val] for coef, val in zip(self.constraints, self.constraint_values)])
+        self.solution_status = None
+        self.optimal_values = {}
 
-# Definir las restricciones
-prob += 6 * x1 + 4 * x2 <= 24, "Restriccion_1"
-prob += x1 + 2 * x2 <= 6, "Restriccion_2"
-prob += -x1 + x2 <= 1, "Restriccion_3"
+    def agregar_corte(self) -> bool:
+        """Adds a Gomory cut based on the current tableau."""
+        filas, columnas = self.tableau.shape
+        for i in range(filas):
+            # Look for fractional rows where the independent term is not integer
+            if not np.isclose(self.tableau[i, -1], np.floor(self.tableau[i, -1])):
+                corte = np.floor(self.tableau[i, -1]) - self.tableau[i, -1]
+                for j in range(columnas - 1):
+                    if not np.isclose(self.tableau[i, j], 0):
+                        corte += (self.tableau[i, j] - np.floor(self.tableau[i, j])) * self.vars[j]
 
-# Resolver el problema relajado inicialmente
-prob.solve()
-print(f"Estado de la solución: {pulp.LpStatus[prob.status]}")
-print(f"x1 = {x1.varValue}, x2 = {x2.varValue}")
+                # Add cut as an additional constraint
+                self.prob += corte <= 0, f"Corte_Gomory_{i}"
+                return True  # Cut added
+        return False  # No fractional cuts found
 
-# Obtener la tabla simplex (conceptual, usando valores directos)
-# En un caso real, aquí deberías obtener la tabla de resultados del solucionador LP
-tableau = np.array([
-    [6, 4, 0, 24],  # Restricción 1
-    [1, 2, 0, 6],   # Restricción 2
-    [-1, 1, 0, 1]   # Restricción 3
-])
+    def solve(self) -> None:
+        """Iteratively solves the problem by adding Gomory cuts."""
+        while True:
+            # Solve the relaxed problem
+            self.prob.solve()
+            self.solution_status = pulp.LpStatus[self.prob.status]
+            self.optimal_values = {v.name: v.varValue for v in self.vars}
 
-# Aplicar el algoritmo de cortes iterativamente
-while True:
-    # Agregar un corte de Gomory si se encuentra
-    if not agregar_corte(prob, [x1, x2], tableau):
-        break
-    # Resolver el problema con los nuevos cortes
-    prob.solve()
-    print(f"Estado de la solución: {pulp.LpStatus[prob.status]}")
-    print(f"x1 = {x1.varValue}, x2 = {x2.varValue}")
+            # Add Gomory cuts iteratively
+            if not self.agregar_corte():
+                break  # Stop if no new cuts are found
 
-# Mostrar la solución final
-print(f"Solución óptima entera: x1 = {x1.varValue}, x2 = {x2.varValue}")
+    def result(self) -> None:
+        """Prints the final integer optimal solution."""
+        print(f"Estado de la solución: {self.solution_status}")
+        for var_name, var_value in self.optimal_values.items():
+            print(f"{var_name} = {var_value}")
+        print(f"Valor óptimo de Z = {self.prob.objective.value()}")
