@@ -30,7 +30,7 @@ ENTERA = EnteraMixta()
 RAMIFICACION = RamificacionAcotacion()
 PURA = EnteraPura()
 MOCHILA = Mochila()
-PLANOS = PlanosCortes([], [], [])
+PLANOS = PlanosCortes()
 
 
 def main(page: ft.Page) -> None:

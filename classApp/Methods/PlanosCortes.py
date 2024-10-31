@@ -2,15 +2,17 @@ import pulp
 import numpy as np
 
 class PlanosCortes:
-    def __init__(self, obj_coef, constraints, constraint_values) -> None:
+    def __init__(self, obj_coef:int=[], constraints:int=[], constraint_values:int=[]) -> None:
         # Initialize attributes
         self.obj_coef = obj_coef  # Coefficients for the objective function
         self.constraints = constraints  # Coefficients for each constraint
         self.constraint_values = constraint_values  # RHS values for each constraint
+       
+    def pre_solve(self)->None:
         self.prob = pulp.LpProblem("Ejemplo_Cortes_Gomory", pulp.LpMaximize)
 
         # Define variables (continuous for initial relaxation)
-        self.vars = [pulp.LpVariable(f"x{i+1}", lowBound=0) for i in range(len(obj_coef))]
+        self.vars = [pulp.LpVariable(f"x{i+1}", lowBound=0) for i in range(len(self.obj_coef))]
 
         # Set up the objective function
         self.prob += pulp.lpSum([self.obj_coef[i] * self.vars[i] for i in range(len(self.vars))]), "Función Objetivo"
@@ -64,10 +66,11 @@ class PlanosCortes:
             self._resultTxt += f"{var_name} = {var_value}\n"
         self._resultTxt += f"Valor óptimo de Z = {self.prob.objective.value()}"
     
-    def set_atr(self, obj_coef:int=[], constraints:int=[], constraint_values:int=[]) -> None:
+    def set_atr(self, obj_coef:int, constraints:int, constraint_values:int) -> None:
         self.obj_coef = obj_coef
         self.constraints = constraints
         self.constraint_values = constraint_values
+        self.pre_solve()
 
     def getResult(self) -> str:
         """Returns the final integer optimal solution as a string."""
