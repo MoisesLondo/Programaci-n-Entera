@@ -1,8 +1,8 @@
 from pulp import LpMaximize, LpProblem, LpVariable, LpStatus, LpMinimize
 
-
 class EnteraPura:
-    def __init__(self, value1, value2, coefRes1, coefRes2, res1, coefRes3, coefRes4, res2, type) -> None:
+    _resultTxt:str
+    def __init__(self, value1:int=0, value2:int=0, coefRes1:int=0, coefRes2:int=0, res1:int=0, coefRes3:int=0, coefRes4:int=0, res2:int=0, type:str="max") -> None:
         self.value1 = value1
         self.value2 = value2
         self.coefRes1 = coefRes1
@@ -13,7 +13,8 @@ class EnteraPura:
         self.res2 = res2
         self.type = type
 
-        # Crear un problema de maximización
+    def pre_solve(self) -> None:
+         # Crear un problema de maximización
         if self.type == "max":
             self.prob = LpProblem("Programacion_Entera_Pura", LpMaximize)
         else:
@@ -45,3 +46,24 @@ class EnteraPura:
         # Mostrar el valor óptimo de la función objetivo
         print(f"Valor óptimo de Z = {self.prob.objective.value()}")
 
+        self._resultTxt=f"""Estado de la solución: {LpStatus[self.prob.status]}
+        x = {self.x.varValue}
+        y = {self.y.varValue}
+        Valor óptimo de Z = {self.prob.objective.value()}
+        """
+
+
+    def set_atr(self, value1:int, value2:int, coefRes1:int, coefRes2:int, res1:int, coefRes3:int, coefRes4:int, res2:int, type:str) -> None:
+        self.value1 = value1
+        self.value2 = value2
+        self.coefRes1 = coefRes1
+        self.coefRes2 = coefRes2
+        self.coefRes3 = coefRes3
+        self.coefRes4 = coefRes4
+        self.res1 = res1
+        self.res2 = res2
+        self.type = type
+        self.pre_solve()
+
+    def getResult(self):
+        return self._resultTxt

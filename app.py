@@ -1,6 +1,6 @@
 import flet as ft
 from flet import View
-from classApp.WidgetClass import Button, ViewClass, Field, Text, Alert, ButtonAlert, Modal
+from classApp.WidgetClass import Button, ViewClass, Field, Text, Alert, ButtonAlert, Modal, FieldArray
 from flet import RouteChangeEvent, ViewPopEvent
 from classApp.Methods.Binaria import Binaria
 from classApp.Methods.EnteraMixta import EnteraMixta
@@ -27,6 +27,8 @@ COLOR_SECOND = config['colors']['second']
 BINARIA = Binaria()
 ENTERA = EnteraMixta()
 RAMIFICACION = RamificacionAcotacion()
+PURA = EnteraPura()
+MOCHILA = Mochila()
 
 
 def main(page: ft.Page) -> None:
@@ -50,7 +52,7 @@ def main(page: ft.Page) -> None:
                     spacing=0, horizontal_alignment=ALIGN_HOR),
                     ft.Row([ Button("Binaria", lambda _: page.go('/binaria')), Button("Entera Mixta", lambda _: page.go('/mixta')), Button("Ramificacion Acotacion", lambda _: page.go('/ramificacion'))], 
                     spacing=10, alignment=ALIGN_VERT),
-                    ft.Row([], 
+                    ft.Row([ Button("Entera Pura", lambda _: page.go('/pura')), Button("Mochila", lambda _: page.go('/mochila'))], 
                     spacing=10, alignment=ALIGN_VERT)
                 ])
         )
@@ -164,6 +166,82 @@ def main(page: ft.Page) -> None:
                     ], alignment=ALIGN_VERT, spacing=5)
                 ])
             )
+        
+        # Entero Pura
+        if page.route == '/pura':
+            field_1 = Field("Valor de X")
+            field_2 = Field("Valor de Y")
+            field_3 = Field("Coe. Restriccion 1", width=90)
+            field_4 = Field("Coe. Restriccion 2", width=90)
+            field_5 = Field("Coe. Restriccion 3", width=90)
+            field_6 = Field("Coe. Restriccion 4", width=90)
+            field_7 = Field("Restriccion 1")
+            field_8 = Field("Restriccion 2")
+            field_9 = Field("Tipo", value="max")
+            def _(e) -> None:
+                try:
+                    PURA.set_atr(int(field_1.getValue()), int(field_2.getValue()), int(field_3.getValue()), int(field_4.getValue()), int(field_5.getValue()), int(field_6.getValue()), int(field_7.getValue()), int(field_8.getValue()) ,str(field_9.getValue()))
+                    PURA.solve()
+                    PURA.result()
+                    modal.openModal(page, "Resultado", [ft.Text(PURA.getResult(), color=COLOR_SECOND), Button("Cerrar", lambda _: page.close(modal))])
+                except ValueError:
+                    alert.openAlert(page, "Error: Por favor, ingrese valores numéricos válidos.")
+                except TypeError:
+                    alert.openAlert(page, "Error: Tipo de dato incorrecto.")
+                except AttributeError:
+                    alert.openAlert(page, "Error: Atributo no encontrado.")
+                except Exception as ex:
+                    alert.openAlert(page, f"Error inesperado: {str(ex)}")
+
+            page.views.append(
+                ViewClass('/pura',
+                [
+                    Text('Entera Pura', 35, "w800"),
+                    ft.Row([field_1, field_2], alignment=ALIGN_VERT, spacing=5), 
+                    ft.Row([field_3, field_4, field_5, field_6], alignment=ALIGN_VERT, spacing=2),
+                    ft.Row([field_7, field_8], alignment=ALIGN_VERT, spacing=5),
+                    ft.Row([field_9], alignment=ALIGN_VERT, spacing=5),
+                    ft.Row([
+                        Button('Calcular', click_action=_),
+                        Button('Volver a menú', lambda _: page.go('/'))
+                    ], alignment=ALIGN_VERT, spacing=5)
+                ])
+            )
+        # Mochilla
+        if page.route == '/mochila':
+            field_1 = FieldArray("Valores")
+            field_2 = FieldArray("Pesos")
+            field_3 = Field("Capacidad", width=150)
+            field_4 = Field("Tipo", value="max")
+            def _(e) -> None:
+                try:
+                    MOCHILA.set_atr(field_1.getValues(), field_2.getValues(), int(field_3.getValue()), str(field_4.getValue()))
+                    MOCHILA.resolver()
+                    MOCHILA.mostrar_resultados()
+                    modal.openModal(page, "Resultado", [ft.Text(MOCHILA.getResult(), color=COLOR_SECOND), Button("Cerrar", lambda _: page.close(modal))])
+                except ValueError:
+                    alert.openAlert(page, "Error: Por favor, ingrese valores numéricos válidos.")
+                except TypeError:
+                    alert.openAlert(page, "Error: Tipo de dato incorrecto.")
+                except AttributeError:
+                    alert.openAlert(page, "Error: Atributo no encontrado.")
+                except Exception as ex:
+                    alert.openAlert(page, f"Error inesperado: {str(ex)}")
+
+            page.views.append(
+                ViewClass('/mochila',
+                [
+                    Text('Mochila', 35, "w800"),
+                    ft.Row([field_1, field_2], alignment=ALIGN_VERT, spacing=5), 
+                    ft.Row([field_3, field_4], alignment=ALIGN_VERT, spacing=3),
+                    ft.Row([
+                        Button('Calcular', click_action=_),
+                        Button('Volver a menú', lambda _: page.go('/'))
+                    ], alignment=ALIGN_VERT, spacing=5)
+                ])
+            )
+            
+
         page.update()
     
     def view_pop(e: ViewPopEvent) -> None:

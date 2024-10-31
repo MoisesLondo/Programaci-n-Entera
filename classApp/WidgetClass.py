@@ -125,3 +125,19 @@ class ButtonAlert(ft.ElevatedButton):
                 STATE.DEFAULT: ft.BorderSide(2,COLOR_PRIMARY),
             }
         )
+
+class FieldArray(Field):
+    def __init__(self, label: str, width: int=200, value=0) -> None:
+        Field.__init__(self, label, width, value) 
+        self.content=ft.Column([
+            ft.Text(value=label, color=COLOR_SECOND),
+            self._TextField,
+            ft.Text(value="Separar los valores con ,", color=COLOR_SECOND)
+        ], spacing=5)
+        
+    def getValues(self) -> []:
+        self.values = []
+        for number in self.getValue().split(','):
+            self.values.append(int(number))
+        print(f"{self.values}")
+        return self.values

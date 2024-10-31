@@ -1,38 +1,63 @@
 from pulp import LpMaximize, LpProblem, LpVariable, lpSum, LpStatus, LpMinimize
 
 class Mochila:
-    def __init__(self, valores, pesos, capacidad, type) -> None:
+
+    _resultTxt:str
+    def __init__(self, valores:int=[], pesos:int=[], capacidad:int=0, type:str="max") -> None:
         self.valores = valores
         self.pesos = pesos
         self.capacidad = capacidad
-        self.num_objetos = len(valores)
-        self.variables = self.crear_variables()
-        self.definir_problema()
-        
+        self.type= type
 
+    def pre_solve(self):
         if self.type == "max":
-            self.prob = LpProblem("Problema_de_la_Mochila", LpMaximize)
+            self.problema_mochila = LpProblem("Problema_de_la_Mochila", LpMaximize)
         else:
-            self.prob = LpProblem("Problema_de_la_Mochila", LpMinimize)
+            self.problema_mochila = LpProblem("Problema_de_la_Mochila", LpMinimize)
 
-    def crear_variables(self) -> []:
-        return [LpVariable(f"x{i+1}", 0, 1, cat="Integer") for i in range(self.num_objetos)]
+        self.n = len(self.pesos)  # Número de objetos
+        self.x = [LpVariable(f"x_{i+1}", cat='Binary') for i in range(self.n)]
+        print("Variables de decisión definidas (0 = no seleccionado, 1 = seleccionado):")
+        for i in range(self.n):
+            print(f"x_{i+1} -> Objeto {i+1}")
+        self.definir_problema()
+
 
     def definir_problema(self) -> None:
-        # Función objetivo: maximizar el valor de los objetos seleccionados
-        self.prob += lpSum(self.valores[i] * self.variables[i] for i in range(self.num_objetos)), "Valor_Total"
-        
-        # Restricción: la suma de los pesos de los objetos seleccionados no debe exceder la capacidad
-        self.prob += lpSum(self.pesos[i] * self.variables[i] for i in range(self.num_objetos)) <= self.capacidad, "Restriccion_Capacidad"
+        self.problema_mochila += sum(self.valores[i] * self.x[i] for i in range(self.n)), "Valor_total"
+        self.problema_mochila += sum(self.pesos[i] * self.x[i] for i in range(self.n)) <= self.capacidad, "Capacidad_mochila"
+
 
     def resolver(self) -> None:
-        self.prob.solve()
+        self.problema_mochila.solve()
 
     def mostrar_resultados(self) -> None:
-        print(f"Estado de la solución: {LpStatus[self.prob.status]}")
-        for i, var in enumerate(self.variables):
-            print(f"x{i+1} (objeto {i+1}): {var.varValue}")
-        print(f"Valor total máximo: {self.prob.objective.value()}")
+        print(f"Estado de la solución: {LpStatus[self.problema_mochila.status]}")
+
+        for i in range(self.n):
+            print(f"Objeto {i+1}: {'Seleccionado' if self.x[i].varValue == 1 else 'No seleccionado'} (Peso: {self.pesos[i]}, Valor: {self.valores[i]})")
+
+        # Paso 7: Calcular y mostrar el valor total en la mochila y el peso total
+        valor_total = sum(self.valores[i] * self.x[i].varValue for i in range(self.n))
+        peso_total = sum(self.pesos[i] * self.x[i].varValue for i in range(self.n))
+        print(f"Valor total en la mochila: {valor_total}")
+        print(f"Peso total en la mochila: {peso_total}")
+        
+        self._resultTxt=f"""Estado de la solución: {LpStatus[self.problema_mochila.status]}
+Valor total en la mochila: {valor_total}
+Peso total en la mochila: {peso_total}
+        """
+
+    def set_atr(self, valores:int=[], pesos:int=[], capacidad:int=0, type:str="max") -> None:
+        self.valores = valores
+        self.pesos = pesos
+        self.capacidad = capacidad
+        self.type= type
+        self.pre_solve()
+
+    def getResult(self) -> None:
+        return self._resultTxt
+
 
 if __name__ == "__main__":
     valores = [15, 25, 12, 10]
@@ -40,7 +65,8 @@ if __name__ == "__main__":
     capacidad = 12
 
     # Crear una instancia de ProblemaMochila
-    mochila = Mochila(valores, pesos, capacidad)
+    mochila = Mochila()
+    mochila.set_atr(valores, pesos, capacidad)
 
     # Resolver el problema
     mochila.resolver()
