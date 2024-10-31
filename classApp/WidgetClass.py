@@ -1,5 +1,7 @@
 import yaml
 import flet as ft
+from typing import List, Any
+
 
 #Lectura del archivo config
 with open('config.yml', 'r') as file:
@@ -141,3 +143,22 @@ class FieldArray(Field):
             self.values.append(int(number))
         print(f"{self.values}")
         return self.values
+
+class Select(ft.Dropdown):
+    def __init__(self, label: str, values: List[str], width: int = 200) -> None:
+        super().__init__()
+        self.label = label
+        self.values = values
+        self.width = width
+        self.bgcolor = COLOR_PRIMARY
+        self.color = COLOR_SECOND
+        self.border_color = COLOR_SECOND
+        self.cursor_color = COLOR_SECOND
+        self.text_align = ALIGN_VERT
+        self.text_size = config['input']['text-size']
+        self.height = config['input']['height']
+        self.value = values[0] if values else None
+        self.options = [ft.dropdown.Option(v) for v in values]
+
+    def getValue(self):
+        return self.value
