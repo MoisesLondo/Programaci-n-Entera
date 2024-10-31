@@ -53,7 +53,7 @@ def main(page: ft.Page) -> None:
                     spacing=0, horizontal_alignment=ALIGN_HOR),
                     ft.Row([ Button("Binaria", lambda _: page.go('/binaria')), Button("Entera Mixta", lambda _: page.go('/mixta')), Button("Ramificacion Acotacion", lambda _: page.go('/ramificacion'))], 
                     spacing=10, alignment=ALIGN_VERT),
-                    ft.Row([ Button("Entera Pura", lambda _: page.go('/pura')), Button("Mochila", lambda _: page.go('/mochila'))], 
+                    ft.Row([ Button("Entera Pura", lambda _: page.go('/pura')), Button("Mochila", lambda _: page.go('/mochila')), Button("Planos de Corte", lambda _: page.go('/planos'))], 
                     spacing=10, alignment=ALIGN_VERT)
                 ])
         )
