@@ -1,6 +1,6 @@
 import flet as ft
 from flet import View
-from classApp.WidgetClass import Button, ViewClass, Field, Text, Alert, ButtonAlert, Modal, FieldArray, Select
+from classApp.WidgetClass import Button, ViewClass, Field, Text, Alert, ButtonAlert, Modal, FieldArray, Select, FieldMatriz
 from flet import RouteChangeEvent, ViewPopEvent
 from classApp.Methods.Binaria import Binaria
 from classApp.Methods.EnteraMixta import EnteraMixta
@@ -30,6 +30,7 @@ ENTERA = EnteraMixta()
 RAMIFICACION = RamificacionAcotacion()
 PURA = EnteraPura()
 MOCHILA = Mochila()
+PLANOS = PlanosCortes([], [], [])
 
 
 def main(page: ft.Page) -> None:
@@ -72,6 +73,7 @@ def main(page: ft.Page) -> None:
                     BINARIA.solve()
                     BINARIA.result()
                     modal.openModal(page, "Resultado", [ft.Text(BINARIA.getResult(), color=COLOR_SECOND), Button("Cerrar", lambda _: page.close(modal))])
+                    createTXT(BINARIA.getResult(), "Binaria")
                 except ValueError:
                     alert.openAlert(page, "Error: Por favor, ingrese valores numéricos válidos.")
                 except TypeError:
@@ -109,6 +111,7 @@ def main(page: ft.Page) -> None:
                     ENTERA.solve()
                     ENTERA.result()
                     modal.openModal(page, "Resultado", [ft.Text(ENTERA.getResult(), color=COLOR_SECOND), Button("Cerrar", lambda _: page.close(modal))])
+                    createTXT(ENTERA.getResult(), "Entera Mixta")
                 except ValueError:
                     alert.openAlert(page, "Error: Por favor, ingrese valores numéricos válidos.")
                 except TypeError:
@@ -145,6 +148,7 @@ def main(page: ft.Page) -> None:
                     RAMIFICACION.solve()
                     RAMIFICACION.result()
                     modal.openModal(page, "Resultado", [ft.Text(RAMIFICACION.getResult(), color=COLOR_SECOND), Button("Cerrar", lambda _: page.close(modal))])
+                    createTXT(RAMIFICACION.getResult(), "Ramificacion Acotacion")
                 except ValueError:
                     alert.openAlert(page, "Error: Por favor, ingrese valores numéricos válidos.")
                 except TypeError:
@@ -185,6 +189,7 @@ def main(page: ft.Page) -> None:
                     PURA.solve()
                     PURA.result()
                     modal.openModal(page, "Resultado", [ft.Text(PURA.getResult(), color=COLOR_SECOND), Button("Cerrar", lambda _: page.close(modal))])
+                    createTXT(PURA.getResult(), "Entera Pura")
                 except ValueError:
                     alert.openAlert(page, "Error: Por favor, ingrese valores numéricos válidos.")
                 except TypeError:
@@ -220,6 +225,7 @@ def main(page: ft.Page) -> None:
                     MOCHILA.resolver()
                     MOCHILA.mostrar_resultados()
                     modal.openModal(page, "Resultado", [ft.Text(MOCHILA.getResult(), color=COLOR_SECOND), Button("Cerrar", lambda _: page.close(modal))])
+                    createTXT(MOCHILA.getResult(), "Mochila")
                 except ValueError:
                     alert.openAlert(page, "Error: Por favor, ingrese valores numéricos válidos.")
                 except TypeError:
@@ -244,15 +250,16 @@ def main(page: ft.Page) -> None:
             
         # Planos y Cortes
         if page.route == '/planos':
-            field_1 = Field("Coeficientes de la función objetivo")
-            field_2 = Field("Coeficientes de las restricciones")
-            field_3 = Field("Valores de las restricciones")
+            field_1 = FieldArray("Coeficientes de la función objetivo")
+            field_2 = FieldMatriz("Coeficientes de las restricciones", width=300)
+            field_3 = FieldArray("Valores de las restricciones")
             def _(e) -> None:
                 try:
-                    createTXT(field_1.getValue(), field_2.getValue(), field_3.getValue())
-                    PlanosCortes.solve()
-                    PlanosCortes.result()
-                    modal.openModal(page, "Resultado", [ft.Text(PlanosCortes.getResult(), color=COLOR_SECOND), Button("Cerrar", lambda _: page.close(modal))])
+                    PLANOS.set_atr(field_1.getValues(), field_2.getValues(), field_3.getValues())
+                    PLANOS.solve()
+                    PLANOS.result()
+                    modal.openModal(page, "Resultado", [ft.Text(PLANOS.getResult(), color=COLOR_SECOND), Button("Cerrar", lambda _: page.close(modal))])
+                    createTXT(PlanosCortes.getResult(), "Planos y Cortes")
                 except ValueError:
                     alert.openAlert(page, "Error: Por favor, ingrese valores numéricos válidos.")
                 except TypeError:

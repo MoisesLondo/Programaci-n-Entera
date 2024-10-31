@@ -58,3 +58,18 @@ class PlanosCortes:
         for var_name, var_value in self.optimal_values.items():
             print(f"{var_name} = {var_value}")
         print(f"Valor óptimo de Z = {self.prob.objective.value()}")
+        
+        self._resultTxt = f"Estado de la solución: {self.solution_status}\n"
+        for var_name, var_value in self.optimal_values.items():
+            self._resultTxt += f"{var_name} = {var_value}\n"
+        self._resultTxt += f"Valor óptimo de Z = {self.prob.objective.value()}"
+    
+    def set_atr(self, obj_coef:int=[], constraints:int=[], constraint_values:int=[]) -> None:
+        self.obj_coef = obj_coef
+        self.constraints = constraints
+        self.constraint_values = constraint_values
+
+    def getResult(self) -> str:
+        """Returns the final integer optimal solution as a string."""
+        return self._resultTxt
+

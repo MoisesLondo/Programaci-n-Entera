@@ -1,5 +1,5 @@
 def createTXT(content, title = None):
-    with open('output.txt', 'a') as f:
+    with open('output.txt', 'a', encoding='utf-8') as f:
         if title:
             f.write(f'\n------------------------------------------{title}------------------------------------------')
         if isinstance(content, list):

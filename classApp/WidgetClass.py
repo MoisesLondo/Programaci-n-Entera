@@ -144,6 +144,23 @@ class FieldArray(Field):
         print(f"{self.values}")
         return self.values
 
+class FieldMatriz(Field):
+    def __init__(self, label: str, width: int=200, value="") -> None:
+        super().__init__(label, width, value)
+        self.content = ft.Column([
+            ft.Text(value=label, color=COLOR_SECOND),
+            self._TextField,
+            ft.Text(value="Ingrese filas separadas por ';' y valores por ','", color=COLOR_SECOND, size=12)
+        ], spacing=5)
+
+    def getValues(self) -> []:
+        matrix = []
+        rows = self.getValue().split(';')
+        for row in rows:
+            matrix.append([int(val.strip()) for val in row.split(',')])
+        print(f"Matrix: {matrix}")
+        return matrix
+
 class Select(ft.Dropdown):
     def __init__(self, label: str, values: List[str], width: int = 200) -> None:
         super().__init__()
