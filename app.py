@@ -8,6 +8,7 @@ from classApp.Methods.EnteraPura import EnteraPura
 from classApp.Methods.Mochila import Mochila
 from classApp.Methods.RamificacionAcotacion import RamificacionAcotacion 
 from classApp.Methods.createTxt import createTXT
+from classApp.Methods.PlanosCortes import PlanosCortes
 # Import the new class
 import yaml
 import traceback
@@ -238,10 +239,42 @@ def main(page: ft.Page) -> None:
                         Button('Calcular', click_action=_),
                         Button('Volver a menú', lambda _: page.go('/'))
                     ], alignment=ALIGN_VERT, spacing=5)
-                ])
-            )
+                     ])
+                )
             
+        # Planos y Cortes
+        if page.route == '/planos':
+            field_1 = Field("Coeficientes de la función objetivo")
+            field_2 = Field("Coeficientes de las restricciones")
+            field_3 = Field("Valores de las restricciones")
+            def _(e) -> None:
+                try:
+                    createTXT(field_1.getValue(), field_2.getValue(), field_3.getValue())
+                    PlanosCortes.solve()
+                    PlanosCortes.result()
+                    modal.openModal(page, "Resultado", [ft.Text(PlanosCortes.getResult(), color=COLOR_SECOND), Button("Cerrar", lambda _: page.close(modal))])
+                except ValueError:
+                    alert.openAlert(page, "Error: Por favor, ingrese valores numéricos válidos.")
+                except TypeError:
+                    alert.openAlert(page, "Error: Tipo de dato incorrecto.")
+                except AttributeError:
+                    alert.openAlert(page, "Error: Atributo no encontrado.")
+                except Exception as ex:
+                    alert.openAlert(page, f"Error inesperado: {str(ex)}")
 
+            page.views.append(
+                ViewClass('/planos',
+                [
+                    Text('Planos y Cortes', 35, "w800"),
+                    ft.Row([field_1], alignment=ALIGN_VERT), 
+                    ft.Row([field_2], alignment=ALIGN_VERT), 
+                    ft.Row([field_3], alignment=ALIGN_VERT), 
+                    ft.Row([
+                        Button('Calcular', click_action=_),
+                        Button('Volver a menú', lambda _: page.go('/'))
+                    ], alignment=ALIGN_VERT, spacing=5)
+                     ])
+                )
         page.update()
     
     def view_pop(e: ViewPopEvent) -> None:
