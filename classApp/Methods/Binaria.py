@@ -1,69 +1,62 @@
-from pulp import LpMinimize, LpProblem, LpVariable, LpStatus, LpMaximize
+from pulp import LpMinimize, LpProblem, LpVariable, LpStatus
 
+class BinariaEstaciones:
+    def __init__(self) -> None:
+        """Inicialización de la clase sin requerir parámetros."""
+        self.num_ciudades = 0
+        self.distancias = []
+        self.tiempo_max = 40  # Valor predeterminado
+        self._resultTxt = ""
+        self.prob = None
 
-class Binaria:
-    _resultTxt:str
-
-    def __init__(self, value1:int=0, value2:int=0, value3:int=0, res1:int=0, res2:int=0, type:str="max") -> None:
-        self.value1 = value1
-        self.value2 = value2
-        self.value3 = value3
-        self.res1 = res1
-        self.res2 = res2
-        self.type = type
-
+    def set_parameters(self, num_ciudades: int, distancias: list, tiempo_max: int = 40) -> None:
+        """
+        Configura los parámetros para el problema de ubicación de estaciones.
+        :param num_ciudades: Número total de ciudades.
+        :param distancias: Matriz de distancias entre ciudades.
+        :param tiempo_max: Tiempo máximo permitido para cubrir cada ciudad.
+        """
+        self.num_ciudades = num_ciudades
+        self.distancias = distancias
+        self.tiempo_max = tiempo_max
+        self.prob = LpProblem("Ubicacion_Estaciones", LpMinimize)
 
     def pre_solve(self) -> None:
-        if self.type == "max":
-            self.prob = LpProblem("Programacion_Binaria", LpMaximize)
-        else:
-            self.prob = LpProblem("Programacion_Binaria", LpMinimize)
-    
-    # Definir las variables de decisión (binarias)
-        self.x = LpVariable('x', cat='Binary')
-        self.y = LpVariable('y', cat='Binary')
-        self.z = LpVariable('z', cat='Binary')
+        if self.prob is None:
+            raise ValueError("Parámetros no configurados. Use set_parameters() antes de resolver.")
 
-    # Definir la función objetivo
-        self.prob += self.value1 * self.x + self.value2 * self.y + self.value3 * self.z, "Función Objetivo"
-    
-    # Definir las restricciones
-        self.prob += self.x + self.y >= self.res1, "Restriccion_1"
-        self.prob += self.y + self.z >= self.res2, "Restriccion_2"
-    # Resolver el problema
+        # Definir variables de decisión (si se coloca una estación en cada ciudad i)
+        self.x = [LpVariable(f'x_{i}', cat='Binary') for i in range(self.num_ciudades)]
+        
+        # Definir la función objetivo (minimizar la cantidad de estaciones)
+        self.prob += sum(self.x), "Minimizar estaciones"
+        
+        # Definir restricciones de cobertura para cada ciudad
+        for j in range(self.num_ciudades):
+            # Asegurar que cada ciudad j tenga al menos una estación a menos de 40 minutos
+            self.prob += sum(self.x[i] for i in range(self.num_ciudades) if self.distancias[i][j] <= self.tiempo_max) >= 1, f"Restriccion_cobertura_{j}"
+
     def solve(self) -> None:
-        self.prob.solve()
-    
+        # Resolver el problema
+        if self.prob is not None:
+            self.prob.solve()
+
     def result(self) -> None:
         # Mostrar el estado de la solución
-        print(f"Estado de la solución: {LpStatus[self.prob.status]}")
+        if self.prob is None:
+            self._resultTxt = "No se ha configurado ni resuelto el problema."
+            return
 
-        # Mostrar los valores óptimos de las variables
-        print(f"x = {self.x.varValue}")
-        print(f"y = {self.y.varValue}")
-        print(f"z = {self.z.varValue}")
+        self._resultTxt = f"Estado de la solución: {LpStatus[self.prob.status]}\n"
+        print(self._resultTxt)
 
-        # Mostrar el valor óptimo de la función objetivo
-        print(f"Valor óptimo de Z = {self.prob.objective.value()}")
-
-        self._resultTxt=f"""Estado de la solución: {LpStatus[self.prob.status]}
-    x = {self.x.varValue}
-    y = {self.y.varValue}
-    z = {self.z.varValue}
-Valor óptimo de Z = {self.prob.objective.value()}
-        """
-
-    def set_atr(self, value1:int, value2:int, value3:int, res1:int, res2:int, type:str) -> None: 
-        self.value1 = value1
-        self.value2 = value2
-        self.value3 = value3
-        self.res1 = res1
-        self.res2 = res2
-        self.type = type
-        self.pre_solve()
-    
+        # Mostrar las ciudades en las que se colocan estaciones
+        estaciones = []
+        for i in range(self.num_ciudades):
+            estaciones.append(f"Ciudad {i}: {'Sí' if self.x[i].varValue == 1 else 'No'}")
+        
+        # Guardar el resultado en _resultTxt
+        self._resultTxt += f"Cantidad mínima de estaciones: {self.prob.objective.value()}\nEstaciones ubicadas:\n" + "\n".join(estaciones)
 
     def getResult(self) -> str:
         return self._resultTxt
-
-    
