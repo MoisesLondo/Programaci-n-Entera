@@ -177,15 +177,16 @@ def main(page: ft.Page) -> None:
         
         # Entero Pura
         if page.route == '/pura':
-            field_1 = Field("Valor de X")
-            field_2 = Field("Valor de Y")
-            field_3 = Field("Coe. 1 Restriccion 1", width=90)
-            field_4 = Field("Coe. 2 Restriccion 1", width=90)
-            field_5 = Field("Coe. 1 Restriccion 2", width=90)
-            field_6 = Field("Coe. 2 Restriccion 2", width=90)
-            field_7 = Field("Restriccion 1")
-            field_8 = Field("Restriccion 2")
+            field_1 = Field("Valor de X", value=5)
+            field_2 = Field("Valor de Y", value=3)
+            field_3 = Field("Coe. 1 Restriccion 1", width=90, value=2)
+            field_4 = Field("Coe. 2 Restriccion 1", width=90, value=3)
+            field_5 = Field("Coe. 1 Restriccion 2", width=90, value=2)
+            field_6 = Field("Coe. 2 Restriccion 2", width=90, value=1)
+            field_7 = Field("Restriccion 1 menor que", value=12)
+            field_8 = Field("Restriccion 2 menor que", value=8)
             select = Select("Tipo", ["max", "min"])
+            select.value = "max"
             def _(e) -> None:
                 try:
                     PURA.set_atr(int(field_1.getValue()), int(field_2.getValue()), int(field_3.getValue()), int(field_4.getValue()), int(field_7.getValue()), int(field_5.getValue()), int(field_6.getValue()), int(field_8.getValue()) ,str(select.getValue()))
