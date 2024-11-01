@@ -263,7 +263,7 @@ def main(page: ft.Page) -> None:
                 except ValueError:
                     alert.openAlert(page, "Error: Por favor, ingrese valores numéricos válidos.")
                 except TypeError:
-                    alert.openAlert(page, "Error: Tipo de dato incorrecto.")
+                    print(traceback.format_exc())
                 except AttributeError:
                     alert.openAlert(page, "Error: Atributo no encontrado.")
                 except Exception as ex:
