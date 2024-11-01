@@ -50,3 +50,31 @@ Objeto 6: Seleccionado (Peso: 12, Valor: 80)
 Valor total en la mochila: 270.0
 Peso total en la mochila: 47.0
         
+------------------------------------------Binaria------------------------------------------
+Estado de la solución: Optimal
+Cantidad mínima de estaciones: 1.0
+Estaciones ubicadas:
+Ciudad 0: No
+Ciudad 1: No
+Ciudad 2: No
+Ciudad 3: No
+Ciudad 4: No
+Ciudad 5: No
+Ciudad 6: No
+Ciudad 7: No
+Ciudad 8: No
+Ciudad 9: Sí
+------------------------------------------Binaria------------------------------------------
+Estado de la solución: Optimal
+Cantidad mínima de estaciones: 1.0
+Estaciones ubicadas:
+Ciudad 0: No
+Ciudad 1: No
+Ciudad 2: No
+Ciudad 3: No
+Ciudad 4: No
+Ciudad 5: No
+Ciudad 6: No
+Ciudad 7: No
+Ciudad 8: No
+Ciudad 9: Sí
