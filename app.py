@@ -2,7 +2,7 @@ import flet as ft
 from flet import View
 from classApp.WidgetClass import Button, ViewClass, Field, Text, Alert, ButtonAlert, Modal, FieldArray, Select, FieldMatriz
 from flet import RouteChangeEvent, ViewPopEvent
-from classApp.Methods.Binaria import Binaria
+from classApp.Methods.Binaria import BinariaEstaciones
 from classApp.Methods.EnteraMixta import EnteraMixta
 from classApp.Methods.EnteraPura import EnteraPura
 from classApp.Methods.Mochila import Mochila
@@ -25,7 +25,7 @@ COLOR_PRIMARY = config['colors']['primary']
 COLOR_SECOND = config['colors']['second']
 
 # ASIGNACION de Clases
-BINARIA = Binaria()
+BINARIA = BinariaEstaciones()
 ENTERA = EnteraMixta()
 RAMIFICACION = RamificacionAcotacion()
 PURA = EnteraPura()
@@ -59,18 +59,15 @@ def main(page: ft.Page) -> None:
                 ])
         )
 
-        # Binaria
+# Binaria
         if page.route == '/binaria':
-            field_1 = Field("Valor del coeficiente de X",width=150, value=2)
-            field_2 = Field("Valor del coeficiente de Y",width=150, value=3)
-            field_3 = Field("Valor del coeficiente de Z",width=150, value=4)
-            field_4 = Field("Restriccion 1", value=1)
-            field_5 = Field("Restriccion 2", value=1)
-            select = Select("Tipo", ["max", "min"])
-            select.value = "min"
+            field_1 = Field("Número de ciudades", value=10)
+            field_2 = FieldMatriz("Distancias", width=800, value="0,35,20,40,30,60,60,20,55,32;35,0,45,35,20,70,30,45,45,34;20,45,0,15,55,20,80,0,90,56;40,35,15,0,65,35,12,15,24,60;30,20,55,65,0,40,40,20,15,12;60,70,20,35,40,0,15,32,0,12;30,40,32,12,55,25,0,34,65,55;80,12,34,67,45,60,65,0,30,45;12,34,56,78,90,100,35,20,0,90;40,12,40,20,24,10,12,0,20,0")
+            field_3 = Field("Tiempo máximo", value=40)
             def _(e) -> None:
                 try:
-                    BINARIA.set_atr(int(field_1.getValue()), int(field_2.getValue()), int(field_3.getValue()), int(field_4.getValue()), int(field_5.getValue()), str(select.getValue()))
+                    BINARIA.set_parameters(int(field_1.getValue()), field_2.getValues(), int(field_3.getValue()))
+                    BINARIA.pre_solve()
                     BINARIA.solve()
                     BINARIA.result()
                     modal.openModal(page, "Resultado", [ft.Text(BINARIA.getResult(), color=COLOR_SECOND), Button("Cerrar", lambda _: page.close(modal))])
@@ -85,18 +82,18 @@ def main(page: ft.Page) -> None:
                     alert.openAlert(page, f"Error inesperado: {str(ex)}")
 
             page.views.append(
-            ViewClass('/binaria', 
+                ViewClass('/binaria',
                 [
                     Text('Binaria', 35, "w800"),
-                    ft.Row([field_1, field_2, field_3], alignment=ALIGN_VERT, spacing=3), 
-                    ft.Row([field_4, field_5], alignment=ALIGN_VERT, spacing=5),
-                    ft.Row([select], alignment=ALIGN_VERT, spacing=5),
+                    ft.Row([field_1, field_3], alignment=ALIGN_VERT, spacing=5), 
+                    ft.Row([field_2], alignment=ALIGN_VERT, spacing=5),
                     ft.Row([
                         Button('Calcular', click_action=_),
                         Button('Volver a menú', lambda _: page.go('/'))
                     ], alignment=ALIGN_VERT, spacing=5)
                 ])
-        )
+            )
+
 
         # Entero Mixto
         if page.route == '/mixta':
