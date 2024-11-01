@@ -219,10 +219,11 @@ def main(page: ft.Page) -> None:
             )
         # Mochilla
         if page.route == '/mochila':
-            field_1 = FieldArray("Valores")
-            field_2 = FieldArray("Pesos")
-            field_3 = Field("Capacidad", width=150)
+            field_1 = FieldArray("Valores", value="3, 6, 5, 5, 7")
+            field_2 = FieldArray("Pesos", value="15, 25, 12, 10, 15")
+            field_3 = Field("Capacidad", width=150, value=120)
             select = Select("Tipo", ["max", "min"])
+            select.value = "max"
             def _(e) -> None:
                 try:
                     MOCHILA.set_atr(field_1.getValues(), field_2.getValues(), int(field_3.getValue()), str(select.getValue()))
