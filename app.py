@@ -255,9 +255,9 @@ def main(page: ft.Page) -> None:
             
         # Planos y Cortes
         if page.route == '/planos':
-            field_1 = FieldArray("Coeficientes de la función objetivo")
-            field_2 = FieldMatriz("Coeficientes de las restricciones", width=300)
-            field_3 = FieldArray("Valores de las restricciones")
+            field_1 = FieldArray("Coeficientes de la función objetivo", value="5, 4")
+            field_2 = FieldMatriz("Coeficientes de las restricciones", width=300, value="6, 4, 1, 2, -1, 1")
+            field_3 = FieldArray("Valores de las restricciones", value="24, 6, 1")
             def _(e) -> None:
                 try:
                     PLANOS.set_atr(field_1.getValues(), field_2.getValues(), field_3.getValues())
