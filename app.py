@@ -141,13 +141,17 @@ def main(page: ft.Page) -> None:
         if page.route == '/ramificacion':
             field_1 = Field("Valor de X", value=3)
             field_2 = Field("Valor de Y", value=2)
-            field_3 = Field("Restriccion 1 menor que", width=150, value=4)
-            field_4 = Field("Restriccion 2 mayor que", width=150, value=0)
+            field_3 = Field("Restriccion 1", width=150, value=4)
+            field_4 = Field("Restriccion 2", width=150, value=0)
+            field_5 = Field("Valor X de Restriccion 1", width=150, value=4)
+            field_6 = Field("Valor X de Restriccion 2", width=150, value=1)
+            field_7 = Field("Valor Y de Restriccion 1", width=150, value=4)
+            field_8 = Field("Valor Y de Restriccion 2", width=150, value=1)
             select = Select("Tipo", ["max", "min"])
             select.value = "max"
             def _(e) -> None:
                 try:
-                    RAMIFICACION.set_atr(int(field_1.getValue()), int(field_2.getValue()), int(field_3.getValue()), int(field_4.getValue()), str(select.getValue()))
+                    RAMIFICACION.set_atr(int(field_1.getValue()), int(field_2.getValue()), int(field_3.getValue()), int(field_4.getValue()), str(select.getValue()), int(field_5.getValue()),int(field_6.getValue()), int(field_7.getValue()), int(field_8.getValue()))
                     RAMIFICACION.solve()
                     RAMIFICACION.result()
                     modal.openModal(page, "Resultado", [ft.Text(RAMIFICACION.getResult(), color=COLOR_SECOND), Button("Cerrar", lambda _: page.close(modal))])
@@ -165,8 +169,10 @@ def main(page: ft.Page) -> None:
                 ViewClass('/ramificacion',
                 [
                     Text('Ramificacion Acotacion', 35, "w800"),
-                    ft.Row([field_1, field_2], alignment=ALIGN_VERT, spacing=5), 
+                    ft.Row([field_1, field_2], alignment=ALIGN_VERT, spacing=5),
                     ft.Row([field_3, field_4], alignment=ALIGN_VERT, spacing=3),
+                    ft.Row([field_5, field_6], alignment=ALIGN_VERT, spacing=3),
+                    ft.Row([field_7, field_8], alignment=ALIGN_VERT, spacing=3),
                     ft.Row([select], alignment=ALIGN_VERT, spacing=5),
                     ft.Row([
                         Button('Calcular', click_action=_),

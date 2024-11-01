@@ -50,3 +50,41 @@ Objeto 6: Seleccionado (Peso: 12, Valor: 80)
 Valor total en la mochila: 270.0
 Peso total en la mochila: 47.0
         
+------------------------------------------Ramificacion Acotacion------------------------------------------
+Estado de la solución: Optimal
+    x = 0.0
+    y = 6.0
+Valor óptimo de Z = -48.0
+        
+------------------------------------------Ramificacion Acotacion------------------------------------------
+Estado de la solución: Optimal
+    x = 0.0
+    y = 6.0
+Valor óptimo de Z = -48.0
+        
+------------------------------------------Ramificacion Acotacion------------------------------------------
+Estado de la solución: Optimal
+    x = 0.0
+    y = 5.0
+Valor óptimo de Z = -40.0
+        
+------------------------------------------Ramificacion Acotacion------------------------------------------
+Estado de la solución: Optimal
+    x = 0.0
+    y = 5.0
+Valor óptimo de Z = -40.0
+Ramificaciones:
+    x = 0.0, Ramificación: No toma 
+y = 5.0, Ramificación: Toma 
+
+        
+------------------------------------------Ramificacion Acotacion------------------------------------------
+Estado de la solución: Optimal
+    x = 3.0
+    y = 4.0
+Valor óptimo de Z = 420.0
+Ramificaciones:
+    x = 3.0, Ramificación: Toma 
+y = 4.0, Ramificación: Toma 
+
+        
