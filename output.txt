@@ -1,0 +1,52 @@
+
+------------------------------------------Mochila------------------------------------------
+Estado de la solución: Optimal
+Valor total en la mochila: 270.0
+Peso total en la mochila: 47.0
+        
+------------------------------------------Mochila------------------------------------------
+Estado de la solución: Optimal
+['Objeto 1: Seleccionado (Peso: 15, Valor: 3)', 'Objeto 2: Seleccionado (Peso: 25, Valor: 6)', 'Objeto 3: Seleccionado (Peso: 12, Valor: 5)', 'Objeto 4: Seleccionado (Peso: 10, Valor: 5)', 'Objeto 5: Seleccionado (Peso: 15, Valor: 7)']
+Valor total en la mochila: 26.0
+Peso total en la mochila: 77.0
+        
+------------------------------------------Mochila------------------------------------------
+Estado de la solución: Optimal
+['Objeto 1: Seleccionado (Peso: 15, Valor: 3)', 'Objeto 2: Seleccionado (Peso: 25, Valor: 6)', 'Objeto 3: Seleccionado (Peso: 12, Valor: 5)', 'Objeto 4: Seleccionado (Peso: 10, Valor: 5)', 'Objeto 5: Seleccionado (Peso: 15, Valor: 7)']
+Valor total en la mochila: 26.0
+Peso total en la mochila: 77.0
+        
+------------------------------------------Mochila------------------------------------------
+Estado de la solución: Optimal
+Valor total en la mochila: 26.0
+Peso total en la mochila: 77.0
+        
+------------------------------------------Mochila------------------------------------------
+Estado de la solución: Optimal
+Objeto 1: Seleccionado (Peso: 15, Valor: 3)Objeto 2: Seleccionado (Peso: 25, Valor: 6)Objeto 3: Seleccionado (Peso: 12, Valor: 5)Objeto 4: Seleccionado (Peso: 10, Valor: 5)Objeto 5: Seleccionado (Peso: 15, Valor: 7)
+Valor total en la mochila: 26.0
+Peso total en la mochila: 77.0
+        
+------------------------------------------Mochila------------------------------------------
+Estado de la solución: Optimal
+Objeto 1: Seleccionado (Peso: 15, Valor: 3) 
+Objeto 2: Seleccionado (Peso: 25, Valor: 6) 
+Objeto 3: Seleccionado (Peso: 12, Valor: 5) 
+Objeto 4: Seleccionado (Peso: 10, Valor: 5) 
+Objeto 5: Seleccionado (Peso: 15, Valor: 7) 
+
+Valor total en la mochila: 26.0
+Peso total en la mochila: 77.0
+        
+------------------------------------------Mochila------------------------------------------
+Estado de la solución: Optimal
+Objeto 1: No seleccionado (Peso: 10, Valor: 60) 
+Objeto 2: Seleccionado (Peso: 20, Valor: 100) 
+Objeto 3: Seleccionado (Peso: 15, Valor: 90) 
+Objeto 4: No seleccionado (Peso: 25, Valor: 120) 
+Objeto 5: No seleccionado (Peso: 30, Valor: 150) 
+Objeto 6: Seleccionado (Peso: 12, Valor: 80) 
+
+Valor total en la mochila: 270.0
+Peso total en la mochila: 47.0
+        
