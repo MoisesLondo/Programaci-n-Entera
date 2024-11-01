@@ -139,11 +139,12 @@ def main(page: ft.Page) -> None:
 
         # Ramificacion Acotacion
         if page.route == '/ramificacion':
-            field_1 = Field("Valor de X")
-            field_2 = Field("Valor de Y")
-            field_3 = Field("Restriccion 1", width=150)
-            field_4 = Field("Restriccion 2", width=150)
+            field_1 = Field("Valor de X", value=3)
+            field_2 = Field("Valor de Y", value=2)
+            field_3 = Field("Restriccion 1 menor que", width=150, value=4)
+            field_4 = Field("Restriccion 2 mayor que", width=150, value=0)
             select = Select("Tipo", ["max", "min"])
+            select.value = "max"
             def _(e) -> None:
                 try:
                     RAMIFICACION.set_atr(int(field_1.getValue()), int(field_2.getValue()), int(field_3.getValue()), int(field_4.getValue()), str(select.getValue()))
