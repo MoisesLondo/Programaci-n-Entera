@@ -61,12 +61,13 @@ def main(page: ft.Page) -> None:
 
         # Binaria
         if page.route == '/binaria':
-            field_1 = Field("Valor de X",width=150)
-            field_2 = Field("Valor de Y",width=150)
-            field_3 = Field("Valor de Z",width=150)
-            field_4 = Field("Restriccion 1")
-            field_5 = Field("Restriccion 2")
+            field_1 = Field("Valor del coeficiente de X",width=150, value=2)
+            field_2 = Field("Valor del coeficiente de Y",width=150, value=3)
+            field_3 = Field("Valor del coeficiente de Z",width=150, value=4)
+            field_4 = Field("Restriccion 1", value=1)
+            field_5 = Field("Restriccion 2", value=1)
             select = Select("Tipo", ["max", "min"])
+            select.value = "min"
             def _(e) -> None:
                 try:
                     BINARIA.set_atr(int(field_1.getValue()), int(field_2.getValue()), int(field_3.getValue()), int(field_4.getValue()), int(field_5.getValue()), str(select.getValue()))
