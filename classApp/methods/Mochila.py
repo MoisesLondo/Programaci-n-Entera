@@ -33,17 +33,22 @@ class Mochila:
 
     def mostrar_resultados(self) -> None:
         print(f"Estado de la solución: {LpStatus[self.problema_mochila.status]}")
-
+        list_str=[]
         for i in range(self.n):
-            print(f"Objeto {i+1}: {'Seleccionado' if self.x[i].varValue == 1 else 'No seleccionado'} (Peso: {self.pesos[i]}, Valor: {self.valores[i]})")
+            list_str.append(f"Objeto {i+1}: {'Seleccionado' if self.x[i].varValue == 1 else 'No seleccionado'} (Peso: {self.pesos[i]}, Valor: {self.valores[i]})")
 
         # Paso 7: Calcular y mostrar el valor total en la mochila y el peso total
         valor_total = sum(self.valores[i] * self.x[i].varValue for i in range(self.n))
         peso_total = sum(self.pesos[i] * self.x[i].varValue for i in range(self.n))
         print(f"Valor total en la mochila: {valor_total}")
         print(f"Peso total en la mochila: {peso_total}")
-        
+        str_list = ''
+        for i in list_str:
+            print(i)
+            str_list += f'{i} \n'
+
         self._resultTxt=f"""Estado de la solución: {LpStatus[self.problema_mochila.status]}
+{str_list}
 Valor total en la mochila: {valor_total}
 Peso total en la mochila: {peso_total}
         """
